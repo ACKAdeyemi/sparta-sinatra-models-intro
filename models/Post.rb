@@ -22,6 +22,19 @@ class Post
     end
   end
 
+  # find one using the ID that'll give it when we all it
+  def self.find id
+    conn = self.open_connection
+
+    sql = "SELECT * FROM post WHERE id=#{id} LIMIT 1" # SQL to find using ID, limit provides very first one
+
+    posts = conn.exec(sql) # get raw results
+
+    post = self.hydrate posts[0] # clean up array
+
+    post # return cleaned first post
+  end
+
   def self.hydrate post_data # HYDRATION - cleaning up raw data pulled from database to turn it into a readable hash for the controller
     post = Post.new # new isntance of post
 

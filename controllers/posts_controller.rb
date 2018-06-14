@@ -26,7 +26,7 @@ class PostsController < Sinatra::Base
     id = params[:id].to_i
 
     # make a single post object available in the template
-    @post = $posts[id]
+    @post = Post.find id
 
     erb :'posts/show'
 
