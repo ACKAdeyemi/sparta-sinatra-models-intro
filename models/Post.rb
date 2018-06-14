@@ -22,7 +22,7 @@ class Post
     end
   end
 
-  # find one using the ID that'll give it when we all it
+  # find one instance/post using the ID that'll give it when we all it
   def self.find id
     conn = self.open_connection
 
@@ -33,6 +33,26 @@ class Post
     post = self.hydrate posts[0] # clean up array
 
     post # return cleaned first post
+  end
+
+  def save
+    conn = Post.open_connection
+
+    if (!self.id) # if instance doesn't have an ID, create new isntance
+      sql = "INSERT INTO post (title, body) VALUES ('#{self.title}','#{self.body}')"
+    else
+      sql = "UPDATE post SET title='#{self.title}', body='#{self.body}' WHERE id='#{self.id}'"
+    end
+
+    conn.exec(sql)
+  end
+
+  def self.destroy id
+    conn = self.open_connection
+
+    sql = "DELETE FROM post WHERE id=#{id}"
+
+    conn.exec(sql)
   end
 
   def self.hydrate post_data # HYDRATION - cleaning up raw data pulled from database to turn it into a readable hash for the controller

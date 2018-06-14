@@ -10,18 +10,24 @@ class PostsController < Sinatra::Base
       register Sinatra::Reloader
   end
 
+  # INDEX
   get '/' do
+    @title = "Blog posts"
 
-      @title = "Blog posts"
+    @posts = Post.all
 
-      @posts = Post.all
-
-      erb :'posts/index'
-
+    erb :'posts/index'
   end
 
-  get '/:id' do
+  # NEW
+  get '/new'  do
+    @post = Post.new
 
+    erb :'posts/new'
+  end
+
+  # SHOW
+  get '/:id' do
     # get the ID and turn it in to an integer
     id = params[:id].to_i
 
@@ -29,38 +35,49 @@ class PostsController < Sinatra::Base
     @post = Post.find id
 
     erb :'posts/show'
-
   end
 
+  # CREATE
   post '/' do
+    post = Post.new
 
-    "CREATE"
+    post.title = params[:title]
+    post.body = params[:body]
 
+    post.save
+
+    redirect '/'
   end
 
-
-  get '/new'  do
-
-    "NEW"
-
-  end
-
-  put '/:id'  do
-
-    "UPDATE: #{params[:id]}"
-
-  end
-
-  delete '/:id'  do
-
-    "DELETE: #{params[:id]}"
-
-  end
-
+  # EDIT
   get '/:id/edit'  do
+    id = params[:id].to_i
 
-    "EDIT: #{params[:id]}"
+    @post = Post.find id
 
+    erb :'posts/edit'
   end
 
+  # UPDATE
+  put '/:id'  do
+    id = params[:id].to_i
+
+    post = Post.find id # find correct post in database using find method
+
+    post.title = params[:title]
+    post.body = params[:body]
+
+    post.save # on save, will update due to conditonal placed in save method in Post model
+
+    redirect '/'
+  end
+
+  # DESTROY
+  delete '/:id'  do
+    id = params[:id].to_i
+
+    Post.destroy id
+
+    redirect '/'
+  end
 end
