@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS post;
 
 CREATE TABLE post (
 
-  id SERIAL PRIMARY KEY, -- handles id creation on craete RESTful route
+  id SERIAL PRIMARY KEY, -- handles id creation on 'create' RESTful route
   title VARCHAR(255),
   body TEXT
 
